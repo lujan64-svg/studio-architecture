@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Studio Architecture</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0f;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #7c3aed, #3b82f6, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-bottom: 48px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .arch-grid {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr 60px 1fr;
+      align-items: start;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto 60px;
+    }
+
+    .arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 80px;
+      color: #4f46e5;
+      font-size: 1.6rem;
+    }
+
+    .layer {
+      background: #111827;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+    }
+
+    .layer-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .layer-icon {
+      font-size: 2.2rem;
+      text-align: center;
+      margin: 10px 0 8px;
+    }
+
+    .layer-title {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 16px;
+    }
+
+    .layer-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .layer-items li {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .layer-items li .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-purple { background: #7c3aed; }
+    .dot-blue   { background: #3b82f6; }
+    .dot-cyan   { background: #06b6d4; }
+    .dot-green  { background: #10b981; }
+    .dot-orange { background: #f59e0b; }
+
+    /* Folder Tree */
+    .tree-section {
+      max-width: 1100px;
+      margin: 0 auto 60px;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #7c3aed;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #1e293b;
+    }
+
+    .tree-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .tree-card {
+      background: #111827;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .tree-card.highlight {
+      border-color: #3b82f680;
+      box-shadow: 0 0 20px #3b82f610;
+    }
+
+    .tree-card-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #3b82f6;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tree {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      line-height: 1.9;
+      color: #64748b;
+    }
+
+    .tree .folder { color: #f59e0b; }
+    .tree .file   { color: #94a3b8; }
+    .tree .active { color: #10b981; font-weight: 600; }
+    .tree .dim    { color: #374151; }
+
+    /* Workflow pipeline */
+    .pipeline {
+      max-width: 1100px;
+      margin: 0 auto 60px;
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .pipe-step {
+      flex: 1;
+      background: #111827;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 20px 16px;
+      position: relative;
+      text-align: center;
+    }
+
+    .pipe-step + .pipe-step {
+      margin-left: -1px;
+      border-left: none;
+      border-radius: 0;
+    }
+
+    .pipe-step:first-child { border-radius: 12px 0 0 12px; }
+    .pipe-step:last-child  { border-radius: 0 12px 12px 0; }
+
+    .pipe-num {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+    }
+
+    .pipe-icon { font-size: 1.6rem; margin-bottom: 8px; }
+
+    .pipe-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 4px;
+    }
+
+    .pipe-desc {
+      font-size: 0.68rem;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .pipe-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      color: #4f46e5;
+      font-size: 1rem;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    /* Legend */
+    .legend {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      background: #111827;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.73rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-color {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Francisco's Studio Architecture</h1>
+  <p class="subtitle">Design Business · Workflow · Infrastructure</p>
+
+  <!-- Top 3-layer pipeline -->
+  <div class="arch-grid">
+
+    <!-- Layer 1: Studio -->
+    <div class="layer">
+      <div class="layer-badge">01 · Studio</div>
+      <div class="layer-icon">🎨</div>
+      <div class="layer-title">Francisco's Studio</div>
+      <ul class="layer-items">
+        <li><span class="dot dot-purple"></span>Claude Code (AI Assistant)</li>
+        <li><span class="dot dot-purple"></span>Photoshop / Design Tools</li>
+        <li><span class="dot dot-purple"></span>Business Card Design</li>
+        <li><span class="dot dot-purple"></span>Client Website Builds</li>
+        <li><span class="dot dot-purple"></span>Asset Creation</li>
+      </ul>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <!-- Layer 2: Version Control -->
+    <div class="layer">
+      <div class="layer-badge">02 · Version Control</div>
+      <div class="layer-icon">🐙</div>
+      <div class="layer-title">GitHub</div>
+      <ul class="layer-items">
+        <li><span class="dot dot-blue"></span>github.com/lujan64-svg</li>
+        <li><span class="dot dot-blue"></span>Per-client repositories</li>
+        <li><span class="dot dot-blue"></span>Auto-push on delivery</li>
+        <li><span class="dot dot-blue"></span>Version history</li>
+        <li><span class="dot dot-blue"></span>Backup & recovery</li>
+      </ul>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <!-- Layer 3: Hosting -->
+    <div class="layer">
+      <div class="layer-badge">03 · Live Hosting</div>
+      <div class="layer-icon">▲</div>
+      <div class="layer-title">Vercel</div>
+      <ul class="layer-items">
+        <li><span class="dot dot-cyan"></span>hernandez-remodeling.vercel.app</li>
+        <li><span class="dot dot-cyan"></span>Production deploys</li>
+        <li><span class="dot dot-cyan"></span>Instant shareable links</li>
+        <li><span class="dot dot-cyan"></span>No login required for clients</li>
+        <li><span class="dot dot-cyan"></span>Auto SSL / CDN</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Folder Structure -->
+  <div class="tree-section">
+    <div class="section-title">📁 Folder Structure Rules</div>
+    <div class="tree-grid">
+
+      <div class="tree-card highlight">
+        <div class="tree-card-title">📂 Root — Francisco/</div>
+        <div class="tree">
+<span class="folder">Francisco/</span>
+├── <span class="folder">hernandez-remodeling/</span>
+├── <span class="folder">client-two/</span>
+├── <span class="folder">client-three/</span>
+├── <span class="folder">studio/</span>
+│   └── <span class="folder">mockups/</span>
+└── <span class="active">CLAUDE.md ← rules live here</span>
+        </div>
+      </div>
+
+      <div class="tree-card">
+        <div class="tree-card-title">📂 Per-Client Project</div>
+        <div class="tree">
+<span class="folder">hernandez-remodeling/</span>
+├── <span class="folder">website/</span>
+│   └── <span class="file">index.html</span>
+├── <span class="folder">business-cards/</span>
+├── <span class="folder">assets/</span>
+├── <span class="folder">exports/</span>
+├── <span class="file">vercel.json</span>
+└── <span class="file">.gitignore</span>
+        </div>
+      </div>
+
+      <div class="tree-card">
+        <div class="tree-card-title">📐 Auto-Folder Logic</div>
+        <div class="tree">
+<span class="active">HTML/CSS/JS</span>  → <span class="folder">website/</span>
+<span class="active">Print files</span>  → <span class="folder">business-cards/</span>
+<span class="active">Logos/Images</span> → <span class="folder">assets/</span>
+<span class="active">Proposals</span>    → <span class="folder">documents/</span>
+<span class="active">Templates</span>    → <span class="folder">templates/</span>
+<span class="active">Scripts</span>      → <span class="folder">scripts/</span>
+<span class="active">Deliverables</span> → <span class="folder">exports/</span>
+<span class="active">Previews</span>     → <span class="folder">mockups/</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Deploy Pipeline -->
+  <div class="tree-section">
+    <div class="section-title">🚀 Deploy Pipeline</div>
+    <div style="display:flex; align-items:stretch; max-width:1100px; margin: 0 auto;">
+
+      <div class="pipe-step">
+        <div class="pipe-num">1</div>
+        <div class="pipe-icon">✏️</div>
+        <div class="pipe-label">Design</div>
+        <div class="pipe-desc">Build with<br>Claude Code</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+
+      <div class="pipe-step">
+        <div class="pipe-num">2</div>
+        <div class="pipe-icon">📁</div>
+        <div class="pipe-label">Organize</div>
+        <div class="pipe-desc">Auto-sorted into<br>dept folders</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+
+      <div class="pipe-step">
+        <div class="pipe-num">3</div>
+        <div class="pipe-icon">💾</div>
+        <div class="pipe-label">Commit</div>
+        <div class="pipe-desc">git add + commit<br>with message</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+
+      <div class="pipe-step">
+        <div class="pipe-num">4</div>
+        <div class="pipe-icon">🐙</div>
+        <div class="pipe-label">Push</div>
+        <div class="pipe-desc">git push →<br>github.com/lujan64-svg</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+
+      <div class="pipe-step">
+        <div class="pipe-num">5</div>
+        <div class="pipe-icon">▲</div>
+        <div class="pipe-label">Deploy</div>
+        <div class="pipe-desc">vercel deploy<br>--prod --yes</div>
+      </div>
+      <div class="pipe-arrow">›</div>
+
+      <div class="pipe-step">
+        <div class="pipe-num">6</div>
+        <div class="pipe-icon">🔗</div>
+        <div class="pipe-label">Share</div>
+        <div class="pipe-desc">Live link sent<br>to client</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="tree-section">
+    <div class="section-title">⚡ Stack</div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-color" style="background:#7c3aed"></div> Claude Code — AI assistant & automation</div>
+      <div class="legend-item"><div class="legend-color" style="background:#f59e0b"></div> Photoshop 2024 — Design source files</div>
+      <div class="legend-item"><div class="legend-color" style="background:#3b82f6"></div> GitHub (lujan64-svg) — Version control</div>
+      <div class="legend-item"><div class="legend-color" style="background:#06b6d4"></div> Vercel — Hosting & live previews</div>
+      <div class="legend-item"><div class="legend-color" style="background:#10b981"></div> CLAUDE.md — Persistent studio rules</div>
+      <div class="legend-item"><div class="legend-color" style="background:#f43f5e"></div> Homebrew + Node — CLI toolchain</div>
+    </div>
+  </div>
+
+</body>
+</html>
